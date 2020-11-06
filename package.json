@@ -1,0 +1,27 @@
+{
+	"name": "commander",
+	"version": "1.0.0",
+	"description": "Register and dispatch commands.",
+	"main": "dist/index.js",
+	"scripts": {
+		"start": "npm run build && node .",
+		"build": "tsc -p tsconfig.json",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/samipourquoi/commander.git"
+	},
+	"keywords": [
+		"commands"
+	],
+	"author": "samipourquoi",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/samipourquoi/commander/issues"
+	},
+	"homepage": "https://github.com/samipourquoi/commander#readme",
+	"dependencies": {
+		"typescript": "^4.0.5"
+	}
+}
