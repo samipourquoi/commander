@@ -4,10 +4,21 @@ import { Type } from "./types";
 // TODO: Generify `Node` interface
 interface Node {
     run?: (w?: any) => void;
+    doc?: Documentation
     parse: (word: string) => any;
     validate: (input: string, consumer?: string[]) => boolean;
     children: Node[];
 }
+
+type Documentation = {
+    name?: string,
+    alias?: string[],
+    description?: string,
+    onlyFor?: string,
+    requires?: string,
+    usage?: string[] | string,
+    author?: string
+};
 
 let indent: number = 0;
 
@@ -72,6 +83,11 @@ export class Brancher {
 
     run(fun: (w: any) => void): Brancher {
         this.last.run = fun;
+        return this;
+    }
+
+    doc(info: Documentation): Brancher {
+        this.last.doc = info;
         return this;
     }
 }
