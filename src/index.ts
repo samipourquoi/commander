@@ -1,1 +1,5 @@
-console.log("hello world");
+import { Command } from "./command";
+
+export {
+    Command
+}
