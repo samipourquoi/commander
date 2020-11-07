@@ -1,27 +1,16 @@
-const Commander = require("..");
+const { Command, NumberType, WordType } = require("..");
 
-class MyCommand extends Commander.Command {
+class MyCommand extends Command {
 	constructor() {
 		super();
 		this.register
-			.with.literal("help")
-				.with.literal("discord").run(() => console.log("discord!"))
-				.or.literal("server")
-				.end
-			.or.literal("bonk").run(() => console.log("*hello world*"))
-				.with.literal("2")
-					.with.literal("3")
-						.with.literal("4").run(() => console.log("*it's a 4*"))
-						.or.literal("still there").run(() => console.log("*no*"))
-						.end
-					.end
-				.end
-			.or.literal("world")
-		.end;
+			.with.arg("number", NumberType.number).run(() => console.log("numbered!"))
+			.or.literal("myliteral").run(() => console.log("hello world"))
+			.or.arg("string", WordType.word).run(() => console.log("stringed!"));
 	}
 
 	print() {
-		console.log(this.run("help discord"));
+		console.log(this.run("myliteral"));
 		// console.log(JSON.stringify(this.tree, null, 4));
 	}
 }

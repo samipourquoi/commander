@@ -1,15 +1,20 @@
 // type Node = object;
+import { Type } from "./types";
+
 interface Node {
     run?: () => void;
-    validate?: (input: string) => boolean;
-    children: Record<string, Node>;
+    validate: (input: string) => boolean;
+    children: Node[];
 }
 
 let indent: number = 0;
 
 export class Command {
     public register: Brancher;
-    public tree: Node = { children: {} };
+    public tree: Node = {
+        validate: (input: string) => true,
+        children: []
+    };
 
     constructor() {
         this.register = new Brancher(null, this.tree);
@@ -21,7 +26,8 @@ export class Command {
 
         // Consumes all the words
         while (words.length > 0) {
-            node = node.children[words.shift()];
+            let word: string = words.shift() as string
+            node = node.children.find(entry => entry.validate(word))
             if (!node) return false;
         }
 
@@ -35,13 +41,15 @@ export class Command {
 }
 
 export class Brancher {
-    public parent: Brancher;
+    public parent: Brancher | null;
     public path: Node;
-    public last: Node | null = null;
+    public last: Node;
 
     constructor(parent: Brancher | null, path?: Node) {
         this.parent = parent;
-        this.path = path ?? parent.path;
+        // `path` should always be defined when `parent` is null
+        this.path = path ?? (parent as Brancher).path;
+        this.last = this.path;
     }
 
     get with(): Register {
@@ -53,7 +61,7 @@ export class Brancher {
         return new Register(this);
     }
 
-    get end(): Brancher {
+    get end(): Brancher | null {
         indent--;
         return this.parent;
     }
@@ -73,13 +81,20 @@ export class Register {
         this.path = brancher.path;
     }
 
-    number(): Brancher {
+    arg(name: string, fn: () => Type<unknown>): Brancher {
+        let type: Type<unknown> = fn();
+        this.path.children.push(this.brancher.last = {
+            children: [],
+            validate: type.validate
+        });
         return this.brancher;
     }
 
-    literal(name: string): Brancher {
-        this.brancher.last = this.path.children[name] = { children: {} };
-        console.log(`${" ".repeat(indent)}${name}`);
+    literal(word: string): Brancher {
+        this.path.children.push(this.brancher.last = {
+            children: [],
+            validate: (input: string) => input == word
+        });
         return this.brancher;
     }
 }
