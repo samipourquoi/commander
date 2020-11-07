@@ -1,8 +1,10 @@
 // type Node = object;
 import { Type } from "./types";
 
+// TODO: Generify `Node` interface
 interface Node {
-    run?: () => void;
+    run?: (w?: any) => void;
+    parse: (word: string) => any;
     validate: (input: string) => boolean;
     children: Node[];
 }
@@ -12,7 +14,8 @@ let indent: number = 0;
 export class Command {
     public register: Brancher;
     public tree: Node = {
-        validate: (input: string) => true,
+        parse: () => "root",
+        validate: () => true,
         children: []
     };
 
@@ -23,16 +26,17 @@ export class Command {
     run(input: string): boolean {
         let words: string[] = input.split(" ");
         let node: Node | undefined = this.tree;
+        let word: string;
 
         // Consumes all the words
-        while (words.length > 0) {
-            let word: string = words.shift() as string
+        do {
+            word = words.shift() as string;
             node = node.children.find(entry => entry.validate(word))
             if (!node) return false;
-        }
+        } while (words.length > 0);
 
         if (node.run) {
-            node.run();
+            node.run(node.parse(word));
             return true;
         } else {
             return false;
@@ -66,7 +70,7 @@ export class Brancher {
         return this.parent;
     }
 
-    run(fun: () => void): Brancher {
+    run(fun: (w: any) => void): Brancher {
         this.last.run = fun;
         return this;
     }
@@ -85,7 +89,8 @@ export class Register {
         let type: Type<unknown> = fn();
         this.path.children.push(this.brancher.last = {
             children: [],
-            validate: type.validate
+            validate: type.validate,
+            parse: type.parse
         });
         return this.brancher;
     }
@@ -93,7 +98,8 @@ export class Register {
     literal(word: string): Brancher {
         this.path.children.push(this.brancher.last = {
             children: [],
-            validate: (input: string) => input == word
+            validate: (input: string) => input == word,
+            parse: () => word
         });
         return this.brancher;
     }
