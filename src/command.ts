@@ -1,13 +1,26 @@
-type Node = object;
+// type Node = object;
+interface Node {
+    run?: () => void;
+    validate?: (input: string) => boolean;
+    children: Record<string, Node>;
+}
 
 let indent: number = 0;
 
 export class Command {
     public register: Brancher;
-    public tree: Node = { };
+    public tree: Node = { children: {} };
 
     constructor() {
         this.register = new Brancher(null, this.tree);
+    }
+
+    run(input: string): boolean {
+        let words: string[] = input.split(" ");
+        let node: Node = this.tree[words[0]];
+        console.log(node);
+
+        return true;
     }
 }
 
@@ -50,8 +63,7 @@ export class Register {
     }
 
     literal(name: string): Brancher {
-        this.path[name] = { };
-        this.brancher.last = this.path[name];
+        this.brancher.last = this.path.children[name] = { children: {} };
         console.log(`${" ".repeat(indent)}${name}`);
         return this.brancher;
     }
