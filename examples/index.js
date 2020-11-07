@@ -3,7 +3,7 @@ const { Command, NumberType, QuotedType } = require("..");
 class MyCommand extends Command {
 	constructor() {
 		super();
-		this.register.with.literal("help")
+		this.register.with.literal("help", "h")
 			.with.literal("fun").run(this.fun)
 			.or.literal("games").run(this.games)
 			.or.literal("utility").run(this.utility);
@@ -31,7 +31,7 @@ class MyCommand extends Command {
 let a = new MyCommand();
 
 try {
-	let { message } = a.run("help utilitys");
+	let { message } = a.run("h utility");
 	console.log(message);
 } catch (e) {
 	console.error(e.toString());

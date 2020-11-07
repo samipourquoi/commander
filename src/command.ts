@@ -114,11 +114,11 @@ export class Register {
 		return this.brancher;
 	}
 
-	literal(word: string): Brancher {
+	literal(...words: string[]): Brancher {
 		this.path.children.push(this.brancher.last = {
 			children: [],
-			validate: (input: string) => input == word,
-			parse: () => word
+			validate: (input: string) => words.includes(input),
+			parse: () => words[0]
 		});
 		return this.brancher;
 	}
