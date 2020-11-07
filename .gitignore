@@ -1,5 +1,5 @@
 # Project
-dist/
+lib/
 
 # Node
 node_modules/

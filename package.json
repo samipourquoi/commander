@@ -2,7 +2,7 @@
 	"name": "@samipourquoi/commander",
 	"version": "1.0.0",
 	"description": "Register and dispatch commands.",
-	"main": "dist/index.js",
+	"main": "lib/index.js",
 	"scripts": {
 		"start": "npm run build && node examples/index.js",
 		"build": "tsc -p tsconfig.json",
@@ -21,7 +21,8 @@
 		"url": "https://github.com/samipourquoi/commander/issues"
 	},
 	"homepage": "https://github.com/samipourquoi/commander#readme",
-	"dependencies": {
+	"dependencies": {},
+	"devDependencies": {
 		"typescript": "^4.0.5"
 	},
 	"files": [
