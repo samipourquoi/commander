@@ -5,7 +5,7 @@ import { Type } from "./types";
 interface Node {
     run?: (w?: any) => void;
     parse: (word: string) => any;
-    validate: (input: string) => boolean;
+    validate: (input: string, consumer?: string[]) => boolean;
     children: Node[];
 }
 
@@ -31,7 +31,7 @@ export class Command {
         // Consumes all the words
         do {
             word = words.shift() as string;
-            node = node.children.find(entry => entry.validate(word))
+            node = node.children.find(entry => entry.validate(word, words))
             if (!node) return false;
         } while (words.length > 0);
 

@@ -3,7 +3,8 @@ import {
     WordType,
     UnquotedStringType,
     NumberType,
-    Type
+    Type,
+    QuotedType
 } from "./types";
 
 export {
@@ -13,5 +14,6 @@ export {
     Type,
     WordType,
     UnquotedStringType,
-    NumberType
+    NumberType,
+    QuotedType
 }

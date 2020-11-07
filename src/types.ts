@@ -1,5 +1,5 @@
 export interface Type<T> {
-	validate: (word: string) => boolean;
+	validate: (word: string, consumer?: string[]) => boolean;
 	parse: (word: string) => T;
 }
 
@@ -44,3 +44,29 @@ export class NumberType implements Type<number> {
 		return +word;
 	}
 }
+
+export class QuotedType implements Type<string> {
+	static quoted(): QuotedType {
+		return new QuotedType();
+	}
+
+	validate(word: string, consumer?: string[]): boolean {
+		if (!consumer) consumer = []; // just in case...
+		if (word.startsWith("\"") || word.startsWith("'")) {
+			let current: string | undefined;
+			console.log(word);
+			do {
+				current = consumer.shift();
+				if (!current) return false;
+			} while (!((current as string).endsWith("\"") || (current as string).endsWith("'")));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	parse(word: string): string {
+		return word;
+	}
+}
+
