@@ -1,19 +1,13 @@
 import { Command } from "./command";
-import {
-    WordType,
-    UnquotedStringType,
-    NumberType,
-    Type,
-    QuotedType
-} from "./types";
+import { NumberType, QuotedType, Type, UnquotedStringType, WordType } from "./types";
 
 export {
-    Command,
+	Command,
 
-    // Types
-    Type,
-    WordType,
-    UnquotedStringType,
-    NumberType,
-    QuotedType
+	// Types
+	Type,
+	WordType,
+	UnquotedStringType,
+	NumberType,
+	QuotedType
 }
