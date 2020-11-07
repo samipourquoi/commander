@@ -47,6 +47,11 @@ export class Brancher {
         indent--;
         return this.parent;
     }
+
+    run(fun: () => void): Brancher {
+        this.last.run = fun;
+        return this;
+    }
 }
 
 export class Register {

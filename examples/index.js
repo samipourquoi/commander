@@ -8,7 +8,7 @@ class MyCommand extends Commander.Command {
 				.with.literal("discord")
 				.or.literal("server")
 				.end
-			.or.literal("bonk")
+			.or.literal("bonk").run(() => console.log("*hello world*"))
 				.with.literal("2")
 					.with.literal("3")
 						.with.literal("4")
@@ -21,7 +21,8 @@ class MyCommand extends Commander.Command {
 	}
 
 	print() {
-		console.log(JSON.stringify(this.tree, null, 4));
+		this.tree.children["bonk"].run();
+		// console.log(JSON.stringify(this.tree, null, 4));
 	}
 }
 
