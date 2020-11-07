@@ -3,14 +3,14 @@ import { Type } from "./types";
 
 // TODO: Generify `Node` interface
 interface Node {
-	run?: (w?: any) => void;
-	doc?: Documentation
+	run?: (w?: any) => any;
+	doc?: Documentation;
 	parse: (word: string) => any;
 	validate: (input: string, consumer?: string[]) => boolean;
 	children: Node[];
 }
 
-type Documentation = {
+export type Documentation = {
 	name?: string,
 	alias?: string[],
 	description?: string,
@@ -22,7 +22,11 @@ type Documentation = {
 
 let indent: number = 0;
 
-export class Command {
+export interface CommandReturn {
+
+}
+
+export class Command<T extends CommandReturn> {
 	public register: Brancher;
 	public tree: Node = {
 		parse: () => "root",
@@ -34,7 +38,7 @@ export class Command {
 		this.register = new Brancher(null, this.tree);
 	}
 
-	run(input: string): boolean {
+	run(input: string): T | never {
 		let words: string[] = input.split(" ");
 		let node: Node | undefined = this.tree;
 		let word: string;
@@ -43,14 +47,13 @@ export class Command {
 		do {
 			word = words.shift() as string;
 			node = node.children.find(entry => entry.validate(word, words))
-			if (!node) return false;
+			if (!node) throw new Error(`Unable to find command: ${input}`);
 		} while (words.length > 0);
 
 		if (node.run) {
-			node.run(node.parse(word));
-			return true;
+			return node.run(node.parse(word));
 		} else {
-			return false;
+			throw new Error(`Command is not executable: ${input}`);
 		}
 	}
 }
