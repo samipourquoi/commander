@@ -14,7 +14,7 @@ export class Command {
 export class Brancher {
     public parent: Brancher;
     public path: Node;
-    public __lastInserted__: Node | null = null;
+    public last: Node | null = null;
 
     constructor(parent: Brancher | null, path?: Node) {
         this.parent = parent;
@@ -23,7 +23,7 @@ export class Brancher {
 
     get with(): Register {
         indent++;
-        return new Register(new Brancher(this, this.__lastInserted__));
+        return new Register(new Brancher(this, this.last));
     }
 
     get or(): Register {
@@ -51,7 +51,7 @@ export class Register {
 
     literal(name: string): Brancher {
         this.path[name] = { };
-        this.brancher.__lastInserted__ = this.path[name];
+        this.brancher.last = this.path[name];
         console.log(`${" ".repeat(indent)}${name}`);
         return this.brancher;
     }
