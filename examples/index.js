@@ -5,7 +5,7 @@ class MyCommand extends Command {
 		super();
 		this.register.with.literal("help", "h")
 			.with.literal("fun").run(this.fun)
-			.or.literal("games").run(this.games)
+			.____.with.literal("games").run(this.games).end
 			.or.literal("utility").run(this.utility);
 	}
 
@@ -31,7 +31,7 @@ class MyCommand extends Command {
 let a = new MyCommand();
 
 try {
-	let { message } = a.run("h utility");
+	let { message } = a.run("h fun games");
 	console.log(message);
 } catch (e) {
 	console.error(e.toString());

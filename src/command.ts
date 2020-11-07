@@ -93,6 +93,42 @@ export class Brancher {
 		this.last.doc = info;
 		return this;
 	}
+
+	/**	The following properties are only there
+		to let people use the syntax with beautiful indentation,
+		while using a Linter of some sort that would break
+		the alignment of the method calls.
+		A way to avoid having to do such a thing would be to
+		use functions with the .with() method.
+		e.g. the following would represent the command `cmd (foo bar|fubar)`:
+
+		```
+		this.register.with(r => {
+			r.literal("cmd").with(r => {
+				r.literal("foo").with(r => {
+					r.literal("bar").run(() => console.log("it's a foo bar!")
+				})
+				.or.literal("fubar").run(() => console.log("it's a fubar!");;
+			});
+		});
+		```
+
+		I just consider this hurts the readability, which I aim to
+		ease as much as I can. The code would look like this with
+		that trick:
+
+		```
+		this.register.with.literal("cmd")
+			.with.literal("foo")
+			.____.with.literal("bar").run(() => console.log("it's a foo bar!").end
+			.or.literal("fubar").run(() => console.log("it's a fubar!")
+		```
+	 */
+	public _____ 	= this;
+	public ____ 	= this;
+	public ___ 		= this;
+	public __ 		= this;
+	public _ 		= this;
 }
 
 export class Register {
