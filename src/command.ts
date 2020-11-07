@@ -17,10 +17,20 @@ export class Command {
 
     run(input: string): boolean {
         let words: string[] = input.split(" ");
-        let node: Node = this.tree[words[0]];
-        console.log(node);
+        let node: Node | undefined = this.tree;
 
-        return true;
+        // Consumes all the words
+        while (words.length > 0) {
+            node = node.children[words.shift()];
+            if (!node) return false;
+        }
+
+        if (node.run) {
+            node.run();
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
