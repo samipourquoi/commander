@@ -4,7 +4,7 @@
 	"description": "Register and dispatch commands.",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "npm run build && node test",
+		"start": "npm run build && node examples/index.js",
 		"build": "tsc -p tsconfig.json",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

@@ -1,44 +1,48 @@
+type Node = object;
+
+let indent: number = 0;
+
 export class Command {
     public register: Brancher;
-    public tree: string = "";
-    public indent: number = 0;
+    public tree: Node = { };
 
     constructor() {
-        this.register = new Brancher(null, this);
+        this.register = new Brancher(null, this.tree);
     }
 }
 
 export class Brancher {
     public parent: Brancher;
-    private readonly command: Command;
+    public path: Node;
+    public __lastInserted__: Node | null = null;
 
-    constructor(parent: Brancher | null, command: Command) {
-        this.command = command;
+    constructor(parent: Brancher | null, path?: Node) {
         this.parent = parent;
+        this.path = path ?? parent.path;
     }
 
     get with(): Register {
-        this.command.indent++;
-        return new Register(new Brancher(this, this.command), this.command);
+        indent++;
+        return new Register(new Brancher(this, this.__lastInserted__));
     }
 
     get or(): Register {
-        return new Register(this, this.command);
+        return new Register(this);
     }
 
     get end(): Brancher {
-        this.command.indent--;
+        indent--;
         return this.parent;
     }
 }
 
 export class Register {
     private readonly brancher: Brancher;
-    private command: Command;
+    private path: Node;
 
-    constructor(brancher: Brancher, command: Command) {
+    constructor(brancher: Brancher) {
         this.brancher = brancher;
-        this.command = command;
+        this.path = brancher.path;
     }
 
     number(): Brancher {
@@ -46,8 +50,9 @@ export class Register {
     }
 
     literal(name: string): Brancher {
-        this.command.tree += name;
-        console.log(`${" ".repeat(this.command.indent)}${name}`);
+        this.path[name] = { };
+        this.brancher.__lastInserted__ = this.path[name];
+        console.log(`${" ".repeat(indent)}${name}`);
         return this.brancher;
     }
 }

@@ -21,9 +21,9 @@ class MyCommand extends Commander.Command {
 	}
 
 	print() {
-		console.log(this);
+		console.log(JSON.stringify(this.tree, null, 4));
 	}
 }
 
 let a = new MyCommand();
-// a.print();
+a.print();
