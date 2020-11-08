@@ -3,9 +3,9 @@ const { Command, NumberType, QuotedType } = require("..");
 class MyCommand extends Command {
 	constructor() {
 		super();
-		this.register.with.literal("help", "h")
-			.with.literal("fun").run(this.fun)
-			.____.with.literal("games").run(this.games).end
+		this.register.with.literal("help", "h").with
+			.literal("fun").run(this.fun).with
+			.____.literal("games").run(this.games).end
 			.or.literal("utility").run(this.utility);
 	}
 

@@ -20,13 +20,7 @@ export type Documentation = {
 	author?: string
 };
 
-let indent: number = 0;
-
-export interface CommandReturn {
-
-}
-
-export class Command<T extends CommandReturn> {
+export class Command<T = any> {
 	public register: Brancher;
 	public tree: Node = {
 		parse: () => "root",
@@ -71,7 +65,6 @@ export class Brancher {
 	}
 
 	get with(): Register {
-		indent++;
 		return new Register(new Brancher(this, this.last));
 	}
 
@@ -80,7 +73,6 @@ export class Brancher {
 	}
 
 	get end(): Brancher | null {
-		indent--;
 		return this.parent;
 	}
 
@@ -120,8 +112,8 @@ export class Brancher {
 		```
 		this.register.with.literal("cmd")
 			.with.literal("foo")
-			.____.with.literal("bar").run(() => console.log("it's a foo bar!").end
-			.or.literal("fubar").run(() => console.log("it's a fubar!")
+			.____.with.literal("bar").run(() => console.log("it's a foo bar!")).end
+			.or.literal("fubar").run(() => console.log("it's a fubar!"));
 		```
 	 */
 	public _____ 	= this;
