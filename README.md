@@ -15,7 +15,9 @@ class MyCommand extends Command {
 		this.register.with.literal("cmd")
             .with.literal("foo").run(() => console.log("it's a foo!"))
             .____.doc({ description: "It's my foo command!" })
-            .____.with.arg("number", NumberType.number).run(w => console.log("it's a value of " + w + "!")).end
+            .____.with.arg("number", NumberType.number).run(w => {
+            	console.log("it's a value of " + w + "!")
+            }).end
             .or.literal("fubar").run(() => console.log("it's a fubar!"));
 	}
 }
@@ -75,7 +77,7 @@ this.register
 ```
 
 **Note: `.____` is a property of a `Brancher` which allows you to indent, 
-but which does not mess up with Linters, etc.**
+but which does not mess up with Linters, etc. It does not do anything.**
 
 ### Registering
 `.with` and `.or` return a `Register`. From that class, as shown above, you can register arguments with:
