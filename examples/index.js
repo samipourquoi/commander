@@ -1,4 +1,4 @@
-const { Command, NumberType, QuotedType } = require("..");
+const { Command, NumberType, WordType } = require("..");
 
 class MyCommand extends Command {
 	constructor() {
@@ -10,26 +10,19 @@ class MyCommand extends Command {
 	}
 
 	fun() {
-		return {
-			message: "fun commands"
-		}
+		return { message: "fun commands" }
 	}
 
 	games() {
-		return {
-			message: "games commands"
-		}
+		return { message: "games commands" }
 	}
 
 	utility() {
-		return {
-			message: "utility commands"
-		}
+		return { message: "utility commands" }
 	}
 }
 
 let a = new MyCommand();
-
 try {
 	let { message } = a.run("h fun games");
 	console.log(message);

@@ -89,7 +89,8 @@ but which does not mess up with Linters, etc. It does not do anything.**
 They both return a `Brancher`.
 
 ### Running
-From a `Brancher`, use `.run()` with a function as a parameter. That function will get executed when it runs
+From a `Brancher`, use `.run(n: any, o: any[])` with a function as a parameter. `n` being the node's parsed argument
+and `o` an array of all the other parsed arguments. That function will get executed when it runs
 the command, and it arrives at the latest registered argument's node.
 **Careful! if the command is run with invalid arguments, it will throw an error.** 
 Make sure to surround the `Command.run()` with a try...catch statement.
@@ -98,6 +99,9 @@ Make sure to surround the `Command.run()` with a try...catch statement.
 this.register
     .with.literal("help").run(() => console.log("help!"))
     .____.with.literal("inside").run(() => console.log("input must be 'help inside'!"))
+    .____.or.arg("number", NumberType.number).run((n, o) => {
+    	console.log(n, o);
+    })
     .____.or.literal("inside2").end
     .or.literal("help2");
 
@@ -105,6 +109,7 @@ this.register
 try {
     command.run("help inside2"); // "input must be 'help inside'!"
     command.run("help inside3"); // throws an error
+    command.run("help 3"); // 3, ['help', 3]
 } catch (e) {
     console.error(e);
 }
@@ -116,7 +121,7 @@ This is encouraged as it allows easier testing.
 // in the constructor
 this.register
     .with.literal("help").run(() => console.log("help!"))
-    .____.with.literal("inside").run(() => "input must be 'help inside'!"))
+    .____.with.literal("inside").run(() => "input must be 'help inside'!")
     .____.or.literal("inside2").end
     .or.literal("help2");
 

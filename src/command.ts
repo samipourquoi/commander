@@ -3,7 +3,7 @@ import { Type } from "./types";
 
 // TODO: Generify `Node` interface
 interface Node {
-	run?: (w?: any) => any;
+	run?: (n?: any, o?: any[]) => any;
 	doc?: Documentation;
 	parse: (word: string) => any;
 	validate: (input: string, consumer?: string[]) => boolean;
@@ -36,16 +36,18 @@ export class Command<T = any> {
 		let words: string[] = input.split(" ");
 		let node: Node | undefined = this.tree;
 		let word: string;
+		let o: any[] = [];
 
 		// Consumes all the words
 		do {
 			word = words.shift() as string;
 			node = node.children.find(entry => entry.validate(word, words))
+			o.push(node?.parse(word));
 			if (!node) throw new Error(`Unable to find command: ${input}`);
 		} while (words.length > 0);
 
 		if (node.run) {
-			return node.run(node.parse(word));
+			return node.run(node.parse(word), o);
 		} else {
 			throw new Error(`Command is not executable: ${input}`);
 		}
@@ -76,7 +78,7 @@ export class Brancher {
 		return this.parent;
 	}
 
-	run(fun: (w: any) => void): Brancher {
+	run(fun: (n?: any, o?: any[]) => void): Brancher {
 		this.last.run = fun;
 		return this;
 	}
