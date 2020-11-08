@@ -32,10 +32,10 @@ cmd.run("cmd blabla"); // throws an error: "Unable to find command"
 
 # Features
 
-## TypeScript compatible
+### TypeScript compatible
 This library is written in TypeScript, which makes it usable in both the TS and JS world!
 
-## Types
+### Types
 Through types, you can add arguments to your commands!
 As shown in the example, use the `.arg()` method to register a typed argument.
 The in-built types are:
@@ -44,11 +44,11 @@ The in-built types are:
 - `QuotedType.quoted`: a string surrounded with quotes, allowing spaces in it;
 - `WordType.word`: a single-worded string composed of the letters of the english alphabet, underscores `_` and numbers.
 
-## Readable Syntax
+### Readable Syntax
 The syntax is concise and readable, making the command easy to maintain without having to write dozens of 
 lines every time.
 
-## Add documentation
+### Add documentation
 You can easily add documentation to any of your command, at any node (= argument).
 
 # Syntax
@@ -96,7 +96,7 @@ Make sure to surround the `Command.run()` with a try...catch statement.
 ```javascript
 // in the constructor
 this.register
-    .with.literal("help").run(() => console.log)
+    .with.literal("help").run(() => console.log("help!"))
     .____.with.literal("inside").run(() => console.log("input must be 'help inside'!"))
     .____.or.literal("inside2").end
     .or.literal("help2");
@@ -115,8 +115,8 @@ This is encouraged as it allows easier testing.
 ```javascript
 // in the constructor
 this.register
-    .with.literal("help").run(() => console.log)
-    .____.with.literal("inside").run(() => console.log("input must be 'help inside'!"))
+    .with.literal("help").run(() => console.log("help!"))
+    .____.with.literal("inside").run(() => "input must be 'help inside'!"))
     .____.or.literal("inside2").end
     .or.literal("help2");
 
@@ -133,7 +133,7 @@ try {
 You can easily document what a specific node does using `.doc()` on a `Brancher`.
 ```javascript
 this.register
-    .with.literal("help").run(() => console.log)
+    .with.literal("help").run(() => console.log("help!"))
     .____.doc({ description: "Sens help about something, hopefully.", author: "samipourquoi" })
     .____.with.literal("inside").run(() => console.log("input must be 'help inside'!"))
     .____.or.literal("inside2").end
