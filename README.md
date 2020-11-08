@@ -1,4 +1,6 @@
 # Commander
+[![NPM](https://nodei.co/npm/@samipourquoi/commander.png)](https://www.npmjs.com/package/@samipourquoi/commander)
+
 Commander helps you build, dispatch and run commands.
 
 Consider the following commands, each having their 'own things':
