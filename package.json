@@ -1,12 +1,13 @@
 {
 	"name": "@samipourquoi/commander",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"description": "Commander helps you build, dispatch and run commands.",
 	"main": "lib/index.js",
 	"scripts": {
 		"start": "npm run build && node examples/index.js",
 		"build": "tsc -p tsconfig.json",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"prepublish": "npm run build"
 	},
 	"repository": {
 		"type": "git",

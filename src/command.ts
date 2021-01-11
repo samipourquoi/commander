@@ -20,7 +20,10 @@ export type Documentation = {
 	author?: string
 };
 
-export interface Context<Closure> {
+/**
+ * Closure being the data to pass to the `run` functions.
+ */
+export type Context<Closure> = {
 	/**
 	 * Parsed argument
 	 */
@@ -30,12 +33,7 @@ export interface Context<Closure> {
 	 * List of all parsed arguments
 	 */
 	args: any[];
-
-	/**
-	 * Data to pass to the `run` functions.
-	 */
-	closure: Closure;
-}
+} & Closure;
 
 export class Command<Closure = unknown, T = any> {
 	public register: Brancher;
