@@ -1,6 +1,6 @@
 {
 	"name": "@samipourquoi/commander",
-	"version": "1.2.0",
+	"version": "1.2.2",
 	"description": "Commander helps you build, dispatch and run commands.",
 	"main": "lib/index.js",
 	"scripts": {
@@ -23,6 +23,6 @@
 	"homepage": "https://github.com/samipourquoi/commander#readme",
 	"dependencies": {},
 	"devDependencies": {
-		"typescript": "^4.0.5"
+		"typescript": "^4.1.3"
 	}
 }
