@@ -3,7 +3,7 @@ import { Type } from "./types";
 
 // TODO: Generify `Node` interface
 interface Node {
-	run?: (n?: any, o?: any[]) => any;
+	run?: (ctx: Context<any>) => any;
 	doc?: Documentation;
 	parse: (word: string) => any;
 	validate: (input: string, consumer?: string[]) => boolean;
@@ -20,7 +20,24 @@ export type Documentation = {
 	author?: string
 };
 
-export class Command<T = any> {
+export interface Context<Closure> {
+	/**
+	 * Parsed argument
+	 */
+	arg: any;
+
+	/**
+	 * List of all parsed arguments
+	 */
+	args: any[];
+
+	/**
+	 * Data to pass to the `run` functions.
+	 */
+	closure: Closure;
+}
+
+export class Command<Closure = unknown, T = any> {
 	public register: Brancher;
 	public tree: Node = {
 		parse: () => "root",
@@ -32,7 +49,7 @@ export class Command<T = any> {
 		this.register = new Brancher(null, this.tree);
 	}
 
-	run(input: string): T | never {
+	run(input: string, closure?: Closure): T | never {
 		let words: string[] = input.split(" ");
 		let node: Node | undefined = this.tree;
 		let word: string;
@@ -47,7 +64,11 @@ export class Command<T = any> {
 		} while (words.length > 0);
 
 		if (node.run) {
-			return node.run(node.parse(word), o);
+			return node.run({
+				arg: node.parse(word),
+				args: o,
+				closure
+			});
 		} else {
 			throw new Error(`Command is not executable: ${input}`);
 		}
@@ -78,7 +99,7 @@ export class Brancher {
 		return this.parent;
 	}
 
-	run(fun: (n?: any, o?: any[]) => void): Brancher {
+	run(fun: (context: Context<any>) => void): Brancher {
 		this.last.run = fun;
 		return this;
 	}
@@ -154,11 +175,9 @@ export class Register {
 	}
 
 	use(command: Command): Brancher { return this.attach(command); }
-	
+
 	attach(command: Command): Brancher {
 		this.path.children = this.path.children.concat(command.tree.children);
 		return this.brancher;
 	}
 }
-
-export type Dispatcher = Command;
