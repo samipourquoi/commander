@@ -1,12 +1,24 @@
 const { Command, NumberType, WordType } = require("..");
 
+class SubCommand extends Command {
+	constructor() {
+		super();
+		this.register
+			.with.literal("sub").run(() => console.log("subcommands!"))
+	}
+}
+
 class MyCommand extends Command {
 	constructor() {
 		super();
-		this.register.with.literal("help", "h").with
-			.literal("fun").run(this.fun).with
-			.____.literal("games").run(this.games).end
-			.or.literal("utility").run(this.utility);
+		let sub = new SubCommand();
+
+		this.register.with.literal("help", "h")
+			.with.literal("fun").run(this.fun)
+			.or.literal("games").run(this.games)
+			.or.literal("utility").run(this.utility)
+			.or.attach(sub).end
+			.end;
 	}
 
 	fun() {
@@ -24,7 +36,7 @@ class MyCommand extends Command {
 
 let a = new MyCommand();
 try {
-	let { message } = a.run("h fun games");
+	let { message } = a.run("h fun");
 	console.log(message);
 } catch (e) {
 	console.error(e.toString());

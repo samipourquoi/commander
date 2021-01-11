@@ -152,4 +152,13 @@ export class Register {
 		});
 		return this.brancher;
 	}
+
+	use(command: Command): Brancher { return this.attach(command); }
+	
+	attach(command: Command): Brancher {
+		this.path.children = this.path.children.concat(command.tree.children);
+		return this.brancher;
+	}
 }
+
+export type Dispatcher = Command;
