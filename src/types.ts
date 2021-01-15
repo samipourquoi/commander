@@ -1,6 +1,6 @@
 export interface Type<T> {
-	validate: (word: string, consumer?: string[]) => boolean;
-	parse: (word: string) => T;
+	validate: (word: string, words?: string[]) => boolean;
+	parse: (word: string, words: string[]) => T;
 }
 
 export class UnquotedStringType implements Type<string> {
@@ -12,7 +12,8 @@ export class UnquotedStringType implements Type<string> {
 		return true;
 	}
 
-	parse(word: string): string {
+	parse(word: string, words: string[]): string {
+		words.shift();
 		return word;
 	}
 }
@@ -26,7 +27,8 @@ export class WordType implements Type<string> {
 		return !!word.match(/^\w*$/);
 	}
 
-	parse(word: string): string {
+	parse(word: string, words: string[]): string {
+		words.shift();
 		return word;
 	}
 }
@@ -40,7 +42,8 @@ export class NumberType implements Type<number> {
 		return !!word.match(/^\d*$/);
 	}
 
-	parse(word: string): number {
+	parse(word: string, words: string[]): number {
+		words.shift();
 		return +word;
 	}
 }
@@ -50,23 +53,37 @@ export class QuotedType implements Type<string> {
 		return new QuotedType();
 	}
 
-	validate(word: string, consumer?: string[]): boolean {
-		if (!consumer) consumer = []; // just in case...
-		if (word.startsWith("\"") || word.startsWith("'")) {
-			let current: string | undefined;
-			console.log(word);
+	validate(word: string, words?: string[]): boolean {
+		if (!words) words = []; // just in case...
+		if (word.startsWith("\"")) {
+			let current: string | undefined = word.slice(1);
 			do {
-				current = consumer.shift();
+				current = words.shift();
 				if (!current) return false;
-			} while (!((current as string).endsWith("\"") || (current as string).endsWith("'")));
-			return true;
-		} else {
-			return false;
+			} while (!current.endsWith("\""));
 		}
+		return true;
 	}
 
-	parse(word: string): string {
-		return word;
+	parse(word: string, words: string[]): string {
+		let parsed: string[] = [];
+
+		if (word.startsWith("\"") && word.endsWith("\"")) {
+			return words.shift()!.slice(1, word.length-1);
+		}
+
+		if (word.startsWith("\"")) {
+			let current: string | undefined = words.shift()!.slice(1);
+			do {
+				parsed.push(current);
+				current = words.shift();
+				if (!current) throw new Error("this shouldn't get thrown");
+			} while (!current.endsWith("\""));
+			parsed.push(current!.slice(0, current!.length-1));
+		} else {
+			return words.shift()!;
+		}
+		return parsed.join(" ");
 	}
 }
 

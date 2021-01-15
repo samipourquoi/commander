@@ -5,7 +5,7 @@ import { Type } from "./types";
 interface Node {
 	run?: (ctx: Context<any>) => any;
 	doc?: Documentation;
-	parse: (word: string) => any;
+	parse: (word: string, words: string[]) => any;
 	validate: (input: string, consumer?: string[]) => boolean;
 	children: Node[];
 }
@@ -55,17 +55,17 @@ export class Command<Closure = unknown, T = any> {
 
 		// Consumes all the words
 		do {
-			word = words.shift() as string;
-			node = node.children.find(entry => entry.validate(word, words))
-			o.push(node?.parse(word));
+			word = words.slice().shift() as string;
+			node = node.children.find(entry => entry.validate(word, words.slice()))
+			o.push(node?.parse(word, words));
 			if (!node) throw new Error(`Unable to find command: ${input}`);
 		} while (words.length > 0);
 
 		if (node.run) {
 			return node.run({
-				arg: node.parse(word),
+				arg: o[o.length-1],
 				args: o,
-				closure
+				...closure
 			});
 		} else {
 			throw new Error(`Command is not executable: ${input}`);
@@ -167,7 +167,9 @@ export class Register {
 		this.path.children.push(this.brancher.last = {
 			children: [],
 			validate: (input: string) => words.includes(input),
-			parse: () => words[0]
+			parse: (_, _words) => {
+				return _words.shift()!;
+			}
 		});
 		return this.brancher;
 	}
