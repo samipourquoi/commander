@@ -158,7 +158,7 @@ export class Register {
 		this.path.children.push(this.brancher.last = {
 			children: [],
 			validate: type.validate,
-			parse: type.parse
+			parse: type.parse.bind(type)
 		});
 		return this.brancher;
 	}

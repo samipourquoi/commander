@@ -87,3 +87,24 @@ export class QuotedType implements Type<string> {
 	}
 }
 
+export class RestType implements Type<unknown> {
+	private type: Type<unknown>;
+
+	constructor(type: Type<unknown>) {
+		this.type = type;
+	}
+
+	parse(word: string, words: string[]): unknown[] {
+		let parsed: unknown[] = [];
+		while (words.length > 0) {
+			let value = this.type.parse(words[0], words);
+			parsed.push(value);
+		}
+		return parsed;
+	}
+
+	validate(): boolean {
+		return true;
+	}
+
+}

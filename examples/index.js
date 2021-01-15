@@ -1,10 +1,11 @@
-const { Command, QuotedType } = require("..");
+const { Command, QuotedType, RestType } = require("..");
 
 class SubCommand extends Command {
 	constructor() {
 		super();
 		this.register
 			.with.literal("sub").run(() => console.log("subcommands!"))
+			.____.with.arg("<rest>", () => new RestType(QuotedType.quoted())).run(ctx => console.log(ctx));
 	}
 }
 
@@ -42,8 +43,8 @@ class MyCommand extends Command {
 
 let a = new MyCommand();
 try {
-	let { message } = a.run(`help games "The Legend of Zelda"`);
-	console.log(message);
+	let result = a.run(`help sub "hello world" "how are you"`);
+	console.log(a.message);
 } catch (e) {
-	console.error(e.toString());
+	console.error(e);
 }
