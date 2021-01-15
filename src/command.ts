@@ -153,12 +153,18 @@ export class Register {
 		this.path = brancher.path;
 	}
 
-	arg(name: string, fn: () => Type<unknown>): Brancher {
-		let type: Type<unknown> = fn();
+	arg(name: string, type: (() => Type<unknown>) | Type<unknown>): Brancher {
+		let t;
+		// for "legacy" reason
+		if (typeof type == "function") {
+			t = type();
+		} else {
+			t = type;
+		}
 		this.path.children.push(this.brancher.last = {
 			children: [],
-			validate: type.validate,
-			parse: type.parse.bind(type)
+			validate: t.validate,
+			parse: t.parse.bind(t)
 		});
 		return this.brancher;
 	}
