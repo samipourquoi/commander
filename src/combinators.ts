@@ -16,7 +16,7 @@ export const union = <A, B> (parser1: Parser<A>, parser2: Parser<B>) => new Pars
  * fails if `predicate` is false
  */
 export const guard = (predicate: boolean): Parser<undefined> =>
-  predicate ? Parser.pure(undefined) : Parser.zero()
+  predicate ? Parser.pure(undefined) : Parser.fail()
 
 /**
  * Parses the combinator as many times as it can.
@@ -35,13 +35,13 @@ export const many = <T> (parser: Parser<T>): Parser<T[]> =>
  * Parses one token if it corresponds to the given string; fails otherwise.
  */
 export const literal = (expected: string) =>
-  item.bind(token => token == expected ? Parser.pure(token) : Parser.zero<string>());
+  item.bind(token => token == expected ? Parser.pure(token) : Parser.fail<string>());
 
 /**
  * Parses a number.
  * @example 42
  */
-export const number = item.bind(token => !isNaN(+token) ? Parser.pure(+token) : Parser.zero<number>());
+export const number = item.bind(token => !isNaN(+token) ? Parser.pure(+token) : Parser.fail<number>());
 
 /**
  * Parses an unquoted string

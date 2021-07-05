@@ -22,7 +22,7 @@ export class Parser<Token> {
     return new Parser(tokens => [[token, tokens]]);
   }
 
-  static zero<T>(): Parser<T> {
+  static fail<T>(): Parser<T> {
     return new Parser(() => []);
   }
 }
