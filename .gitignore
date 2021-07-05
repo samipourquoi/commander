@@ -1,13 +1,7 @@
-# Project
-lib/
-
-# Node
-node_modules/
+# editors
+.vscode
+.idea
+>>>>>>> 70f7f6e (add monadic parser)
 
 # macOS
 .DS_Store
-
-# IDEs
-.vscode/
-.idea/
-commander.iml
