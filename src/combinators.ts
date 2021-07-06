@@ -13,7 +13,7 @@ export const union = <A, B> (parser1: Parser<A>, parser2: Parser<B>) => new Pars
   [...parse(tokens, parser1), ...parse(tokens, parser2)]);
 
 /**
- * fails if `predicate` is false
+ * Fails if `predicate` is false.
  */
 export const guard = (predicate: boolean): Parser<undefined> =>
   predicate ? Parser.pure(undefined) : Parser.fail()
@@ -31,17 +31,19 @@ export const many = <T> (parser: Parser<T>): Parser<T[]> =>
     Parser.pure([])
   );
 
+export const run = <T> (fn: (ctx?: T) => void) => new Parser(tokens => tokens.length == 0 ? [ [fn, []] ] : []);
+
 /**
  * Parses one token if it corresponds to the given string; fails otherwise.
  */
 export const literal = (expected: string) =>
-  item.bind(token => token == expected ? Parser.pure(token) : Parser.fail<string>());
+  item.bind(token => guard(token == expected).bind(Parser.pure(token)));
 
 /**
  * Parses a number.
  * @example 42
  */
-export const number = item.bind(token => !isNaN(+token) ? Parser.pure(+token) : Parser.fail<number>());
+export const number = item.bind(token => guard(!isNaN(+token)).bind(Parser.pure(+token)));
 
 /**
  * Parses an unquoted string
@@ -69,7 +71,7 @@ export const quotedString =
         item.bind(end => guard(end.endsWith(`"`))
           // puts everything together and removes the quotes
           .bind(Parser.pure([start, ...middle, end].join(" ").slice(1, -1)))))))
-  )
+  );
 
 /**
  * Parses quoted and unquoted strings.

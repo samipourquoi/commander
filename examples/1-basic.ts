@@ -1,7 +1,7 @@
-import { p, parse } from "../src";
+import * as p from "../src";
 
 const input = `hello world`;
 
 const command = p.literal("hello").bind(p.string);
 
-console.log(parse(input, command));
+console.log(p.parse(input, command));

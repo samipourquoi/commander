@@ -1,5 +1,4 @@
-import { p, parse, Parser } from "../src";
-import { literal } from "../src/combinators";
+import * as p from "../src";
 
 interface Anime {
   id: number,
@@ -17,14 +16,14 @@ const db: Anime[] = [
 const animeParser = p.string.bind(name => {
   const lookup = db.find(anime => anime.name == name)
   return lookup ?
-    Parser.pure(lookup) :
-    Parser.fail<Anime>();
+    p.Parser.pure(lookup) :
+    p.Parser.fail<Anime>();
 });
 
-const command = literal("info").bind(animeParser);
+const command = p.literal("info").bind(animeParser);
 
 const correct = `info "One Piece"`;
 const incorrect = `info "Bing bong dong"`
 
-console.log(parse(correct, command));   // matches
-console.log(parse(incorrect, command)); // fails
+console.log(p.parse(correct, command));   // matches
+console.log(p.parse(incorrect, command)); // fails
